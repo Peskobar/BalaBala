@@ -29,3 +29,20 @@ def test_snapshot(tmp_path, monkeypatch) -> None:
     config_manager.zapisz("test.conf", "dane", "inicjalny")
     historia = subprocess.run(["git", "log", "--oneline"], cwd=snap, capture_output=True, text=True)
     assert "inicjalny" in historia.stdout
+
+
+def test_snapshot_list(tmp_path, monkeypatch) -> None:
+    repo = tmp_path / "snap"
+    monkeypatch.setenv("PIR_OUT_SNAPSHOTS", str(repo))
+    repo.mkdir()
+    subprocess.run(["git", "init"], cwd=repo, check=True)
+    (repo / "plik").write_text("d")
+    subprocess.run(["git", "add", "plik"], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "start"], cwd=repo, check=True)
+    wynik = subprocess.run([
+        sys.executable,
+        "-m",
+        "pirout",
+        "snapshot-list",
+    ], capture_output=True, text=True)
+    assert "start" in wynik.stdout

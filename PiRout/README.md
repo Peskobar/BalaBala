@@ -15,6 +15,11 @@ make run
 make test
 ```
 
+## Lista migawek
+```
+python -m pirout snapshot-list
+```
+
 ## Lint
 ```
 make lint

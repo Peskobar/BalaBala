@@ -1,4 +1,5 @@
 import datetime
+import os
 from pathlib import Path
 import subprocess
 
@@ -32,6 +33,22 @@ def doctor(zapisz: Path = typer.Option(None, help="Plik na raport")) -> None:
         typer.echo(f"Raport zapisano w {zapisz}")
     else:
         typer.echo(tresc)
+
+
+@app.command("snapshot-list")
+def snapshot_list() -> None:
+    """Wyświetla historię migawek konfiguracji."""
+    repo = Path(os.getenv("PIR_OUT_SNAPSHOTS", "/var/lib/pirout/snapshots"))
+    if not (repo / ".git").exists():
+        typer.echo("Brak migawek")
+        raise typer.Exit()
+    wynik = subprocess.run(
+        ["git", "-C", str(repo), "log", "--oneline"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    typer.echo(wynik.stdout)
 
 
 if __name__ == "__main__":

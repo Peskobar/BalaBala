@@ -1,5 +1,7 @@
 """Podstawowa klasa zarządzająca usługami VPN."""
+
 import subprocess
+
 
 class MenedzerVPN:
     """Bazowy menedżer VPN."""
