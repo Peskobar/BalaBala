@@ -23,5 +23,11 @@ def firewall_stop() -> tuple:
     return jsonify({"firewall": "wylaczona"})
 
 
+@app.route("/firewall/status")
+def firewall_status_api() -> tuple:
+    aktywna = zapora.status()
+    return jsonify({"firewall": "aktywna" if aktywna else "wylaczona"})
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

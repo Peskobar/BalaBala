@@ -6,6 +6,8 @@ import subprocess
 import psutil
 import typer
 
+from .firewall_manager import MenedzerZapory
+
 app = typer.Typer(help="Narzędzie CLI PiRout")
 
 
@@ -49,6 +51,15 @@ def snapshot_list() -> None:
         check=True,
     )
     typer.echo(wynik.stdout)
+
+
+@app.command("firewall-status")
+def firewall_status() -> None:
+    """Sprawdza stan zapory."""
+    menedzer = MenedzerZapory()
+    aktywna = menedzer.status()
+    stan = "aktywna" if aktywna else "wylaczona"
+    typer.echo(f"Zapora {stan}")
 
 
 if __name__ == "__main__":

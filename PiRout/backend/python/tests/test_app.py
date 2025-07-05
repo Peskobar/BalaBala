@@ -2,10 +2,11 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 sys.path.append(str(ROOT))
 
 import api.app as api_app  # noqa: E402
+
 
 def test_status():
     klient = api_app.app.test_client()
@@ -34,3 +35,11 @@ def test_firewall_stop(monkeypatch):
     dane = json.loads(odp.data)
     assert dane['firewall'] == 'wylaczona'
     assert akcje == ['stop']
+
+
+def test_firewall_status(monkeypatch):
+    monkeypatch.setattr(api_app.zapora, 'status', lambda: True)
+    klient = api_app.app.test_client()
+    odp = klient.get('/firewall/status')
+    dane = json.loads(odp.data)
+    assert dane['firewall'] == 'aktywna'
