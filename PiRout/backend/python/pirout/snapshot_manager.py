@@ -6,7 +6,9 @@ from pathlib import Path
 
 from .config_manager import KATALOG_KONFIG
 
-KATALOG_SNAP = Path(os.getenv('PIR_OUT_SNAPSHOTS', '/var/lib/pirout/snapshots'))
+KATALOG_SNAP = Path(
+    os.getenv('PIR_OUT_SNAPSHOTS', '/var/lib/pirout/snapshots')
+)
 
 
 def _inicjuj_repo() -> None:
@@ -35,11 +37,19 @@ def zapisz_snapshot(opis: str) -> None:
     _inicjuj_repo()
     _skopiuj_konfiguracje()
     subprocess.run(['git', 'add', '-A'], cwd=KATALOG_SNAP, check=True)
-    subprocess.run(['git', 'commit', '-m', opis], cwd=KATALOG_SNAP, check=True)
+    subprocess.run(
+        ['git', 'commit', '-m', opis],
+        cwd=KATALOG_SNAP,
+        check=True,
+    )
 
 
 def rollback(commit_id: str) -> None:
-    subprocess.run(['git', 'checkout', commit_id, '--', '.'], cwd=KATALOG_SNAP, check=True)
+    subprocess.run(
+        ['git', 'checkout', commit_id, '--', '.'],
+        cwd=KATALOG_SNAP,
+        check=True,
+    )
     for src in KATALOG_SNAP.iterdir():
         if src.name == '.git':
             continue
