@@ -1,2 +1,7 @@
 """Moduł inicjujący PiRout."""
-__all__ = []
+
+__all__ = [
+    'health_daemon',
+    'snapshot_manager',
+    'cli',
+]

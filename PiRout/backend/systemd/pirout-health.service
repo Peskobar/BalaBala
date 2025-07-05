@@ -1,0 +1,11 @@
+[Unit]
+Description=PiRout Health Check Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/pirout/health_daemon.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
